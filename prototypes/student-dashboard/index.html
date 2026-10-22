@@ -1,0 +1,1049 @@
+<title>Taqsha Student Home</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,650;12..96,750&family=Figtree:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: prototype chrome band on top; inside it, the student app — week header, one "up next" hero, then the week's work in the main column and time-bound things in a right rail. */
+:root {
+  --bg: #EEF2F1;
+  --surface: #FFFFFF;
+  --surface-2: #F6F8F7;
+  --ink: #13201E;
+  --muted: #586967;
+  --line: #DAE2E0;
+  --brand: #0E5A55;
+  --brand-soft: #E0EEEC;
+  --on-brand: #FFFFFF;
+  --accent: #C9730E;
+  --accent-soft: #FBEEDB;
+  --good: #2C7A48;
+  --good-soft: #E1F1E6;
+  --warn: #B2461A;
+  --warn-soft: #FBE7DE;
+  --note: #3550C4;
+  --note-soft: #E8ECFC;
+  --chrome: #13201E;
+  --chrome-ink: #E9EFEE;
+  --chrome-muted: #9DB0AC;
+  --f-display: "Bricolage Grotesque", "Avenir Next", "Segoe UI", system-ui, sans-serif;
+  --f-body: "Figtree", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 16px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1312; --surface: #141E1C; --surface-2: #192422; --ink: #E4ECEA; --muted: #93A6A2; --line: #26332F;
+    --brand: #5CC2B5; --brand-soft: #16302C; --on-brand: #0C1312; --accent: #F0A443; --accent-soft: #352610;
+    --good: #5CC27F; --good-soft: #15301F; --warn: #F08A57; --warn-soft: #3A1E12; --note: #9EADFF; --note-soft: #1D2342;
+    --chrome: #070C0B; --chrome-ink: #E4ECEA; --chrome-muted: #8A9D99;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1312; --surface: #141E1C; --surface-2: #192422; --ink: #E4ECEA; --muted: #93A6A2; --line: #26332F;
+  --brand: #5CC2B5; --brand-soft: #16302C; --on-brand: #0C1312; --accent: #F0A443; --accent-soft: #352610;
+  --good: #5CC27F; --good-soft: #15301F; --warn: #F08A57; --warn-soft: #3A1E12; --note: #9EADFF; --note-soft: #1D2342;
+  --chrome: #070C0B; --chrome-ink: #E4ECEA; --chrome-muted: #8A9D99;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { background: var(--bg); color: var(--ink); font-family: var(--f-body); font-size: 15px; line-height: 1.5; }
+h1, h2, h3, h4 { font-family: var(--f-display); margin: 0; text-wrap: balance; letter-spacing: -0.01em; }
+p { margin: 0; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible, textarea:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+a { color: var(--brand); }
+.mono { font-family: var(--f-mono); font-variant-numeric: tabular-nums; }
+.label { font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+/* ---------- Prototype chrome ---------- */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--chrome); }
+.chrome { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--chrome); color: var(--chrome-ink);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 10px; }
+.chrome-inner { max-width: 1240px; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; }
+.chrome-title { font-family: var(--f-display); font-weight: 650; font-size: 15px; display: flex; align-items: center; gap: 8px; white-space: nowrap; }
+.chrome-title small { font-family: var(--f-body); font-weight: 500; color: var(--chrome-muted); font-size: 12.5px; }
+.tabs { display: flex; gap: 2px; background: rgba(255,255,255,.07); padding: 3px; border-radius: 8px; }
+.tabs button { background: none; border: 0; padding: 5px 12px; border-radius: 6px; color: var(--chrome-muted); font-weight: 600; font-size: 13px; }
+.tabs button[aria-selected="true"] { background: var(--chrome-ink); color: var(--chrome); }
+.chrome-spacer { flex: 1; }
+.scen { display: flex; align-items: center; gap: 8px; min-width: 0; max-width: 100%; }
+.scen-list { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; }
+.scen-list button { white-space: nowrap; background: none; border: 1px solid rgba(255,255,255,.16); color: var(--chrome-ink); padding: 4px 10px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.scen-list button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: #1B1204; font-weight: 650; }
+.notes-toggle { display: flex; align-items: center; gap: 8px; background: none; border: 1px solid rgba(255,255,255,.16); color: var(--chrome-ink); padding: 4px 10px 4px 6px; border-radius: 999px; font-size: 12.5px; font-weight: 600; white-space: nowrap; }
+.notes-toggle .sw { width: 26px; height: 16px; border-radius: 99px; background: rgba(255,255,255,.2); position: relative; transition: background .2s; }
+.notes-toggle .sw::after { content: ""; position: absolute; left: 2px; top: 2px; width: 12px; height: 12px; border-radius: 50%; background: var(--chrome-ink); transition: transform .2s; }
+.notes-toggle[aria-pressed="true"] .sw { background: #6F86F0; }
+.notes-toggle[aria-pressed="true"] .sw::after { transform: translateX(10px); }
+.scen-caption { max-width: 1240px; margin: 8px auto 0; font-size: 12.5px; color: var(--chrome-muted); }
+.scen-caption b { color: var(--chrome-ink); font-weight: 600; }
+
+/* ---------- Page wrap ---------- */
+.wrap { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 20px 48px; }
+.frame { max-width: 1240px; margin: 0 auto; }
+
+/* ---------- Student app ---------- */
+.app { background: var(--bg); border: 1px solid var(--line); border-radius: var(--r-lg); overflow: hidden; }
+.appbar { display: flex; align-items: center; gap: 20px; padding: 12px 20px; background: var(--surface); border-bottom: 1px solid var(--line); }
+.logo { font-family: var(--f-display); font-weight: 750; font-size: 20px; letter-spacing: -0.02em; color: var(--brand); display: flex; align-items: center; gap: 8px; }
+.logo-mark { width: 22px; height: 22px; border-radius: 6px; background: var(--brand); position: relative; }
+.logo-mark::after { content: ""; position: absolute; inset: 5px 5px 9px 5px; border: 2px solid var(--on-brand); border-bottom: 0; border-radius: 2px 2px 0 0; }
+.nav { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; flex: 1; min-width: 0; }
+.nav a { text-decoration: none; color: var(--muted); font-weight: 600; font-size: 14px; padding: 6px 10px; border-radius: 8px; white-space: nowrap; }
+.nav a[aria-current="page"] { color: var(--ink); background: var(--surface-2); }
+.who { display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.who-meta { text-align: right; font-size: 12.5px; line-height: 1.25; }
+.who-meta b { display: block; font-size: 13.5px; }
+.who-meta span { color: var(--muted); }
+.avatar { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-weight: 700; font-size: 13px; background: var(--brand-soft); color: var(--brand); flex: none; }
+@media (max-width: 760px) { .who-meta { display: none; } .appbar { gap: 12px; padding: 10px 14px; } }
+
+.app-body { padding: 22px 22px 28px; display: grid; gap: 18px; }
+@media (max-width: 640px) { .app-body { padding: 14px 12px 20px; } }
+
+/* week header */
+.weekhead { display: grid; gap: 14px; }
+.weekhead-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 10px 20px; }
+.weekhead h1 { font-size: clamp(24px, 3.2vw, 32px); font-weight: 750; line-height: 1.1; }
+.weekhead h1 .wk { color: var(--brand); }
+.weekhead .sub { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--surface); border: 1px solid var(--line); white-space: nowrap; }
+.chip.accent { background: var(--accent-soft); border-color: transparent; color: var(--accent); }
+.chip.good { background: var(--good-soft); border-color: transparent; color: var(--good); }
+.chip.warn { background: var(--warn-soft); border-color: transparent; color: var(--warn); }
+.chip.brand { background: var(--brand-soft); border-color: transparent; color: var(--brand); }
+
+.journey { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.jw { display: grid; gap: 6px; min-width: 0; }
+.jw-bar { height: 8px; border-radius: 99px; background: var(--line); overflow: hidden; display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
+.jw-bar i { display: block; background: transparent; }
+.jw-bar i.on { background: var(--brand); }
+.jw-bar i.today { background: var(--accent); }
+.jw-lab { font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 6px; }
+.jw-lab b { color: var(--ink); font-weight: 600; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.jw.current .jw-lab b { color: var(--brand); }
+@media (max-width: 640px) { .jw-lab span, .jw-lab .wt { display: none; } }
+
+/* weekly loop */
+.loop { display: grid; grid-template-columns: repeat(5, 1fr); background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); }
+.step { padding: 12px 14px; display: grid; gap: 3px; position: relative; min-width: 0; }
+.step + .step { border-left: 1px solid var(--line); }
+.step-top { display: flex; align-items: center; gap: 8px; }
+.dot { width: 18px; height: 18px; border-radius: 50%; flex: none; display: grid; place-items: center; border: 2px solid var(--line); background: var(--surface); }
+.step.done .dot { background: var(--good); border-color: var(--good); }
+.step.done .dot::after { content: ""; width: 7px; height: 4px; border: 2px solid var(--surface); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.step.active .dot { border-color: var(--accent); box-shadow: inset 0 0 0 3px var(--surface); background: var(--accent); }
+.step.missed .dot { border-color: var(--warn); border-style: dashed; }
+.step.locked .dot { border-style: dotted; }
+.step-name { font-weight: 650; font-size: 14px; }
+.step-meta { font-size: 12.5px; color: var(--muted); padding-left: 26px; }
+.step.active { background: var(--accent-soft); }
+.step.active .step-meta { color: var(--accent); font-weight: 600; }
+.step.missed .step-meta { color: var(--warn); }
+.step:first-child.active { border-radius: var(--r-md) 0 0 var(--r-md); }
+.step:last-child.active { border-radius: 0 var(--r-md) var(--r-md) 0; }
+@media (max-width: 860px) {
+  .loop { grid-template-columns: 1fr; }
+  .step + .step { border-left: 0; border-top: 1px solid var(--line); }
+  .step { grid-template-columns: auto 1fr; align-items: center; }
+  .step-meta { padding-left: 0; text-align: right; }
+  .step.active, .step:first-child.active, .step:last-child.active { border-radius: 0; }
+}
+
+/* columns */
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 18px; align-items: start; }
+.main, .rail { display: grid; gap: 18px; min-width: 0; }
+@media (max-width: 1020px) { .cols { grid-template-columns: minmax(0, 1fr); } }
+
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 18px; display: grid; gap: 14px; min-width: 0; }
+.card-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.card-h h2 { font-size: 17px; font-weight: 650; }
+.card-h .aside { font-size: 13px; color: var(--muted); }
+.pri { display: none; font-family: var(--f-mono); font-size: 10.5px; font-weight: 500; padding: 1px 6px; border-radius: 4px; background: var(--note-soft); color: var(--note); margin-left: 6px; vertical-align: 2px; letter-spacing: 0; }
+.notes-on .pri { display: inline-block; }
+
+/* hero */
+.hero { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-lg); padding: 22px; display: grid; gap: 16px; position: relative; overflow: hidden; }
+.hero::before { content: ""; position: absolute; inset: 0 auto 0 0; width: 4px; background: var(--accent); }
+.hero.tone-good::before { background: var(--good); }
+.hero.tone-brand::before { background: var(--brand); }
+.hero-eyebrow { display: flex; align-items: center; gap: 8px; font-size: 12.5px; font-weight: 650; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent); }
+.hero.tone-good .hero-eyebrow { color: var(--good); }
+.hero.tone-brand .hero-eyebrow { color: var(--brand); }
+.hero h2 { font-size: clamp(22px, 2.6vw, 28px); font-weight: 750; line-height: 1.15; }
+.hero p.lead { color: var(--muted); max-width: 62ch; font-size: 15px; }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+@media (max-width: 760px) { .hero-grid { grid-template-columns: minmax(0, 1fr); } }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.btn { display: inline-flex; align-items: center; gap: 8px; border-radius: 8px; padding: 9px 16px; font-weight: 650; font-size: 14px; border: 1px solid var(--line); background: var(--surface); text-decoration: none; color: var(--ink); }
+.btn:hover { background: var(--surface-2); }
+.btn.primary { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn[disabled] { opacity: .45; cursor: not-allowed; filter: none; }
+.btn.sm { padding: 6px 11px; font-size: 13px; }
+.panel { background: var(--surface-2); border-radius: var(--r-md); padding: 14px; display: grid; gap: 10px; min-width: 0; }
+.panel h3 { font-size: 14px; font-weight: 650; font-family: var(--f-body); letter-spacing: 0; }
+
+.checklist { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.checklist li { display: grid; grid-template-columns: 20px 1fr; gap: 8px; align-items: start; font-size: 14px; }
+.tick { width: 18px; height: 18px; border-radius: 5px; border: 2px solid var(--line); margin-top: 1px; display: grid; place-items: center; background: var(--surface); }
+.tick.on { background: var(--good); border-color: var(--good); }
+.tick.on::after { content: ""; width: 7px; height: 4px; border: 2px solid var(--surface); border-top: 0; border-right: 0; transform: rotate(-45deg) translate(1px, -1px); }
+.checklist li.done span { color: var(--muted); }
+
+.file { display: flex; align-items: center; gap: 10px; padding: 10px 12px; border: 1px dashed var(--line); border-radius: var(--r-sm); background: var(--surface); font-size: 13.5px; min-width: 0; }
+.file-ic { width: 28px; height: 34px; border-radius: 4px; background: var(--warn-soft); color: var(--warn); font: 600 9px var(--f-mono); display: grid; place-items: end center; padding-bottom: 4px; flex: none; }
+.file b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.file span { color: var(--muted); font-size: 12.5px; }
+.file > div { min-width: 0; }
+
+.rubric-pick { display: grid; gap: 10px; }
+.rp-row { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 10px; align-items: center; }
+.rp-row > span { font-weight: 600; font-size: 14px; }
+.seg { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.seg button { border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 6px 4px; font-size: 12px; font-weight: 600; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: var(--on-brand); }
+@media (max-width: 560px) { .rp-row { grid-template-columns: 1fr; gap: 4px; } }
+
+.compare { width: 100%; border-collapse: collapse; font-size: 14px; }
+.compare th { text-align: left; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); padding: 0 8px 6px 0; }
+.compare td { padding: 7px 8px 7px 0; border-top: 1px solid var(--line); }
+.compare td.n { font-family: var(--f-mono); text-align: right; width: 54px; }
+.compare th.n { text-align: right; }
+.gap-pill { font-family: var(--f-mono); font-size: 12px; padding: 1px 6px; border-radius: 4px; }
+.gap-pill.over { background: var(--warn-soft); color: var(--warn); }
+.gap-pill.under { background: var(--brand-soft); color: var(--brand); }
+.gap-pill.match { background: var(--good-soft); color: var(--good); }
+.quote { border-left: 3px solid var(--brand); padding: 2px 0 2px 12px; font-size: 14.5px; }
+.quote cite { display: block; font-style: normal; color: var(--muted); font-size: 12.5px; margin-top: 4px; }
+.carry { display: grid; gap: 4px; background: var(--brand-soft); border-radius: var(--r-sm); padding: 10px 12px; font-size: 14px; }
+.carry .label { color: var(--brand); }
+
+.countdown { display: flex; align-items: baseline; gap: 10px; }
+.countdown .big { font-family: var(--f-display); font-weight: 750; font-size: 64px; line-height: .9; color: var(--accent); }
+.countdown .unit { font-family: var(--f-display); font-weight: 650; font-size: 22px; line-height: 1.1; }
+
+.plan { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: p; }
+.plan li { display: grid; grid-template-columns: 26px 1fr auto; gap: 10px; align-items: center; background: var(--surface-2); border-radius: var(--r-sm); padding: 10px 12px; font-size: 14px; counter-increment: p; }
+.plan li::before { content: counter(p); width: 24px; height: 24px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); font: 600 12px var(--f-mono); display: grid; place-items: center; }
+.plan .mins { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); }
+
+/* prompt */
+.prompt-q { font-family: var(--f-display); font-weight: 650; font-size: 19px; line-height: 1.3; }
+.prompt textarea { width: 100%; min-height: 76px; resize: vertical; border: 1px solid var(--line); border-radius: var(--r-sm); padding: 10px 12px; font: inherit; font-size: 14.5px; background: var(--surface-2); color: var(--ink); }
+.prompt-foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; }
+.streak { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--muted); }
+.streak-days { display: flex; gap: 3px; }
+.streak-days i { width: 10px; height: 10px; border-radius: 3px; background: var(--line); }
+.streak-days i.on { background: var(--accent); }
+.prompt-done { display: grid; gap: 10px; }
+.prompt-mine { background: var(--surface-2); border-radius: var(--r-sm); padding: 10px 12px; font-size: 14.5px; white-space: pre-wrap; overflow-wrap: anywhere; }
+.peers { display: grid; gap: 6px; }
+.peer { font-size: 13.5px; display: grid; grid-template-columns: 26px 1fr; gap: 8px; }
+.peer .avatar { width: 26px; height: 26px; font-size: 10.5px; }
+.peer b { font-weight: 600; }
+
+/* learn */
+.learn { list-style: none; margin: 0; padding: 0; display: grid; }
+.learn li { display: grid; grid-template-columns: 22px 40px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 10px 0; border-top: 1px solid var(--line); }
+.learn li:first-child { border-top: 0; padding-top: 0; }
+.learn .tickbtn { background: none; border: 0; padding: 0; width: 22px; height: 22px; display: grid; place-items: center; }
+.thumb { width: 40px; height: 40px; border-radius: 8px; display: grid; place-items: center; background: var(--brand-soft); color: var(--brand); }
+.thumb.video { background: var(--accent-soft); color: var(--accent); }
+.thumb svg { width: 18px; height: 18px; }
+.learn .t { font-weight: 600; font-size: 14.5px; }
+.learn .m { font-size: 12.5px; color: var(--muted); }
+.learn li.done .t { color: var(--muted); text-decoration: line-through; text-decoration-color: var(--line); }
+.learn .dur { font-family: var(--f-mono); font-size: 12.5px; color: var(--muted); white-space: nowrap; }
+.tag { display: inline-block; font-size: 11px; font-weight: 600; padding: 0 6px; border-radius: 4px; background: var(--surface-2); color: var(--muted); margin-right: 4px; }
+.tag.must { background: var(--accent-soft); color: var(--accent); }
+.progressline { height: 6px; border-radius: 99px; background: var(--line); overflow: hidden; }
+.progressline i { display: block; height: 100%; background: var(--brand); border-radius: 99px; transition: width .3s; }
+
+/* growth */
+.growth { display: grid; gap: 4px; }
+.g-row { display: grid; grid-template-columns: minmax(0, 1fr) 168px 54px 64px; gap: 12px; align-items: center; padding: 8px 0; border-top: 1px solid var(--line); }
+.g-row.head { border-top: 0; padding: 0 0 2px; }
+.g-row.head span { font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.g-row .name { font-weight: 600; font-size: 14px; }
+.g-row .val { font-family: var(--f-mono); font-size: 14px; text-align: right; }
+.g-row .delta { font-family: var(--f-mono); font-size: 12.5px; text-align: right; }
+.delta.up { color: var(--good); }
+.delta.flat { color: var(--muted); }
+.spark { width: 168px; height: 40px; display: block; overflow: visible; }
+.spark-axis { display: grid; grid-template-columns: repeat(4, 48px); margin-left: -12px; width: 192px; font: 11px var(--f-mono); color: var(--muted); text-align: center; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12.5px; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; background: var(--brand); display: inline-block; }
+.legend i.self { height: 10px; width: 10px; border-radius: 50%; background: transparent; border: 2px solid var(--muted); }
+.scale-note { font-size: 12.5px; color: var(--muted); }
+@media (max-width: 560px) { .g-row { grid-template-columns: minmax(0, 1fr) 168px 40px; } .g-row .delta { display: none; } }
+
+.skillp { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.skill { border: 1px solid var(--line); border-radius: var(--r-sm); padding: 10px 12px; display: grid; gap: 4px; }
+.skill b { font-size: 14px; }
+.skill span { font-size: 12.5px; color: var(--muted); }
+.skill .lvl { font-family: var(--f-mono); font-size: 12px; color: var(--brand); }
+
+/* rail */
+.agenda { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.agenda li { display: grid; grid-template-columns: 50px minmax(0, 1fr); gap: 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.agenda li:first-child { border-top: 0; padding-top: 0; }
+.date { text-align: center; border-radius: 8px; background: var(--surface-2); padding: 4px 0 5px; line-height: 1.1; align-self: start; }
+.date small { display: block; font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.date b { font-family: var(--f-display); font-size: 20px; font-weight: 700; }
+.agenda li.hot .date { background: var(--accent-soft); }
+.agenda li.hot .date small, .agenda li.hot .date b { color: var(--accent); }
+.agenda .t { font-weight: 650; font-size: 14px; }
+.agenda .m { font-size: 12.5px; color: var(--muted); }
+.agenda .actions { margin-top: 6px; }
+
+.person { display: grid; grid-template-columns: 42px minmax(0, 1fr); gap: 12px; align-items: center; }
+.person .avatar { width: 42px; height: 42px; font-size: 14px; }
+.person b { display: block; font-size: 14.5px; }
+.person span { font-size: 12.5px; color: var(--muted); }
+.people { display: grid; gap: 12px; }
+
+.pulse-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.stat { background: var(--surface-2); border-radius: var(--r-sm); padding: 10px 12px; }
+.stat b { font-family: var(--f-display); font-size: 22px; font-weight: 700; display: block; line-height: 1.1; }
+.stat span { font-size: 12.5px; color: var(--muted); }
+.feed { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.feed li { display: grid; grid-template-columns: 26px minmax(0, 1fr); gap: 8px; font-size: 13.5px; }
+.feed .avatar { width: 26px; height: 26px; font-size: 10.5px; }
+.feed time { display: block; font-size: 12px; color: var(--muted); }
+
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+.badge { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; font-weight: 600; padding: 5px 10px 5px 6px; border-radius: 999px; background: var(--surface-2); }
+.badge i { width: 18px; height: 18px; border-radius: 50%; background: var(--accent); display: block; }
+.badge.off { color: var(--muted); }
+.badge.off i { background: transparent; border: 2px dashed var(--line); }
+
+.coach { background: var(--brand); color: var(--on-brand); border-color: var(--brand); }
+.coach p { opacity: .9; font-size: 14px; }
+.coach h2 { color: var(--on-brand); }
+.coach .btn { background: var(--on-brand); color: var(--brand); border-color: var(--on-brand); }
+.coach .pri { background: var(--on-brand); color: var(--brand); }
+
+/* PM notes */
+.note { display: none; border: 1px dashed var(--note); background: var(--note-soft); color: var(--ink); border-radius: var(--r-sm); padding: 10px 12px; font-size: 13px; line-height: 1.45; }
+.note::before { content: "PM note"; display: block; font: 600 10.5px var(--f-mono); letter-spacing: .08em; text-transform: uppercase; color: var(--note); margin-bottom: 3px; }
+.note a { color: var(--note); }
+.notes-on .note { display: block; }
+.coach .note { color: var(--ink); }
+
+/* toast */
+.toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--ink); color: var(--bg); padding: 9px 16px; border-radius: 8px; font-size: 13.5px; font-weight: 600; transition: opacity .2s, transform .2s; pointer-events: none; z-index: 20; max-width: calc(100% - 32px); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* ---------- Approach ---------- */
+.doc { max-width: 1040px; margin: 0 auto; display: grid; gap: 28px; }
+.doc-hero { display: grid; gap: 10px; padding-top: 8px; }
+.doc-hero h1 { font-size: clamp(28px, 4vw, 40px); font-weight: 750; line-height: 1.08; max-width: 22ch; }
+.doc-hero p { color: var(--muted); font-size: 16.5px; max-width: 64ch; }
+.doc section { display: grid; gap: 12px; }
+.doc h2 { font-size: 22px; font-weight: 700; }
+.doc p, .doc li { max-width: 68ch; }
+.doc ul, .doc ol { margin: 0; padding-left: 20px; display: grid; gap: 6px; }
+.callout { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 16px 18px; display: grid; gap: 8px; }
+.callout.warn { background: var(--accent-soft); border-color: transparent; }
+.principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+.principle { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; display: grid; gap: 6px; align-content: start; }
+.principle h3 { font-size: 16px; font-weight: 650; }
+.principle p { font-size: 14px; color: var(--muted); }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); }
+.tbl { border-collapse: collapse; width: 100%; font-size: 14px; min-width: 640px; }
+.tbl th, .tbl td { text-align: left; padding: 10px 14px; border-top: 1px solid var(--line); vertical-align: top; }
+.tbl thead th { border-top: 0; font-size: 11.5px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); background: var(--surface-2); }
+.tbl td:first-child { font-weight: 600; white-space: nowrap; }
+.refs { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+.ref { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 12px 14px; display: grid; gap: 4px; font-size: 14px; }
+.ref a { font-weight: 650; text-decoration: none; }
+.ref span { color: var(--muted); font-size: 13px; }
+.ref.drop a { color: var(--muted); text-decoration: line-through; }
+.metric-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.metric { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r-md); padding: 14px 16px; display: grid; gap: 4px; }
+.metric.star { border-color: var(--brand); background: var(--brand-soft); }
+.metric b { font-size: 15px; }
+.metric span { font-size: 13.5px; color: var(--muted); }
+.metric .label { color: var(--brand); }
+</style>
+
+<div class="chrome" role="region" aria-label="Prototype controls">
+  <div class="chrome-inner">
+    <div class="chrome-title">Taqsha student home <small>prototype v0.3</small></div>
+    <div class="tabs" role="tablist" aria-label="View">
+      <button role="tab" id="tab-prototype" aria-selected="true" data-view="prototype">Prototype</button>
+      <button role="tab" id="tab-approach" aria-selected="false" data-view="approach">Approach</button>
+    </div>
+    <div class="chrome-spacer"></div>
+    <div class="scen" id="scen-wrap">
+      <div class="scen-list" id="scen-list" role="group" aria-label="Scenario"></div>
+      <button class="notes-toggle" id="notes-toggle" aria-pressed="false"><span class="sw"></span>PM notes</button>
+    </div>
+  </div>
+  <div class="scen-caption" id="scen-caption"></div>
+</div>
+
+<div class="wrap">
+  <div class="frame" id="view-prototype">
+    <div class="app" id="app">
+      <header class="appbar">
+        <div class="logo"><span class="logo-mark" aria-hidden="true"></span>Taqsha</div>
+        <nav class="nav" aria-label="Student">
+          <a href="#prototype" aria-current="page">Home</a>
+          <a href="#prototype">This week</a>
+          <a href="#prototype">Library</a>
+          <a href="#prototype">Sessions</a>
+          <a href="#prototype">Progress</a>
+          <a href="#prototype">Cohort</a>
+        </nav>
+        <div class="who">
+          <div class="who-meta"><b>Ananya Rao</b><span>Product track · Cohort 3</span></div>
+          <div class="avatar" aria-hidden="true">AR</div>
+        </div>
+      </header>
+      <div class="app-body" id="app-body"></div>
+    </div>
+  </div>
+
+  <div class="doc" id="view-approach" hidden>
+    <div class="doc-hero">
+      <span class="label">Approach · Student dashboard rework</span>
+      <h1>Show the week, one next step, and visible growth</h1>
+      <p>Taqsha's program is a four-week loop: a daily prompt, a library to work through, a live session, a deliverable, a self-assessment and a mentor score. It ends in a final presentation and a mentor-signed skill profile. The student home should run that loop for the student instead of handing them a menu of modules.</p>
+    </div>
+
+    <section class="callout warn">
+      <b>What I had to work from</b>
+      <p>I couldn't see the live student dashboard: the repo is empty and the only Supabase project on the account is an inactive personal one. The "current state" below is reconstructed from <i>Taqsha_Features_by_Role</i>, <i>Taqsha_Final_Program_User_Journey</i> and the Notion migration doc. Share a screenshot or URL of today's dashboard and I'll redo the before/after against the real thing.</p>
+    </section>
+
+    <section>
+      <h2>1. What the dashboard is for</h2>
+      <p>Taqsha is a structured, mentored programme where a student produces real work every week and leaves with evidence of skill (a rubric trail and a signed skill profile). Being solo and online, it is most likely to fail through drift: missed prompts, a skipped session, a late deliverable, then silence. So the student home has two jobs:</p>
+      <ol>
+        <li><b>Keep the student in the weekly loop.</b> Every visit should answer "what do I do now?" in one glance.</li>
+        <li><b>Make improvement visible.</b> Scores, self-assessment gaps and the skill profile are why the programme exists. They belong on the home screen, not buried in a report.</li>
+      </ol>
+    </section>
+
+    <section>
+      <h2>2. What's wrong with a feature-first dashboard</h2>
+      <p>The feature list is organised by module: content library, case study library, daily nudge, live session hub, submission upload, rubric views, badges, chat. Built as tiles, that becomes a grid of fourteen doors. The student then has to work out for themselves which door matters on a Thursday of Week 2. Three symptoms to check against the current build:</p>
+      <ul>
+        <li>The same layout on day 1 and on deadline day, even though the right next action is completely different.</li>
+        <li>Libraries showing everything, rather than what this week's milestone needs.</li>
+        <li>Mentor feedback arriving as a score with no comparison to the student's own rating and no trend.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>3. Principles</h2>
+      <div class="principles">
+        <div class="principle"><h3>The week is the unit</h3><p>Everything is framed as "Week 2 of 4 · Define the opportunity". The five-step loop (Learn, Live session, Submit, Self-assess, Mentor feedback) mirrors Steps 1–7 of the user journey doc.</p></div>
+        <div class="principle"><h3>One next action, chosen by state</h3><p>The hero card changes with day, deadlines, feedback posted and inactivity. It never shows two equally loud CTAs.</p></div>
+        <div class="principle"><h3>Only this week's content</h3><p>The library is filtered and ordered for the current milestone, with must-reads marked. The full library stays one click away.</p></div>
+        <div class="principle"><h3>Growth you can see</h3><p>Rubric trend per criterion, plus your rating next to the mentor's. The gap appears only after the mentor scores, so self-assessment stays honest.</p></div>
+        <div class="principle"><h3>Recover without guilt</h3><p>Inactivity turns into a short catch-up plan. Streaks pause instead of resetting to zero. This is the same signal facilitators see as an at-risk flag.</p></div>
+        <div class="principle"><h3>Cohort as presence, not noise</h3><p>A pulse in the rail (how many answered or submitted, a few updates) gives a solo student company without competing with the work.</p></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>4. The state model</h2>
+      <p>The layout stays fixed, but the content changes with where the student is. The prototype's scenario switcher walks through the five states I'd design and test first:</p>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>State</th><th>Trigger</th><th>Hero shows</th><th>Feature (priority)</th></tr></thead>
+        <tbody>
+          <tr><td>Start of week</td><td>Monday, new milestone unlocked</td><td>The first thing to do, linked to last week's weakest criterion</td><td>Content + case study library (P0)</td></tr>
+          <tr><td>Deadline</td><td>Deliverable due within 48h</td><td>Brief checklist → upload → self-assessment → locked</td><td>Submission upload (P0), self-assessment (P1)</td></tr>
+          <tr><td>Feedback in</td><td>Mentor score posted</td><td>Your rating vs your mentor's, one thing to carry forward</td><td>Rubric trend, gap view (P1)</td></tr>
+          <tr><td>Final stretch</td><td>Week 4</td><td>Countdown, prep checklist, skill profile preview</td><td>Countdown (P2), skill profile (P1)</td></tr>
+          <tr><td>Drifting</td><td>No activity for 3+ days or a missed session</td><td>A 25-minute catch-up plan and a route to the facilitator</td><td>Daily nudge (P0); feeds facilitator at-risk flag (P0)</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>5. How I'd run the rework</h2>
+      <div class="tbl-wrap"><table class="tbl">
+        <thead><tr><th>Phase</th><th>What happens</th><th>Output</th></tr></thead>
+        <tbody>
+          <tr><td>Weeks 1–2 · Discover</td><td>Pull current funnel data for the weekly loop: prompt response, session attendance, on-time submission, drop-off week. Interview 6–8 students from Cohorts 1–2 (include two who dropped out), 2 mentors and the facilitators.</td><td>Where the loop leaks, ranked</td></tr>
+          <tr><td>Week 3 · Define</td><td>Agree the state model and hero rules with the programme team. Close the open decisions below.</td><td>One-page spec + state table</td></tr>
+          <tr><td>Weeks 3–4 · Prototype</td><td>This prototype → clickable Figma per state. Five students per state run task tests ("you have a brief due tomorrow — go").</td><td>Validated layout + copy</td></tr>
+          <tr><td>Weeks 5–8 · Build v1 (P0)</td><td>Week header, loop, hero rules, daily prompt inline, filtered library, live session hub, upload.</td><td>Ships to next cohort</td></tr>
+          <tr><td>Cohort +1 · v1.1 (P1)</td><td>Self-assessment lock, rubric trend, gap view, Week 4 skill profile.</td><td>Growth layer live</td></tr>
+          <tr><td>Later · v2 (P2)</td><td>AI coach, cohort feed, badges, chat, countdown. Behind flags; A/B test whether the feed helps completion.</td><td>Evidence-based keep/kill</td></tr>
+        </tbody>
+      </table></div>
+    </section>
+
+    <section>
+      <h2>6. How we'd know it worked</h2>
+      <div class="metric-grid">
+        <div class="metric star"><span class="label">North star</span><b>Weekly loop completion</b><span>Share of active students who finish all five steps in a given week.</span></div>
+        <div class="metric"><span class="label">Input</span><b>Daily prompt response rate</b><span>Answered within 24h of the nudge.</span></div>
+        <div class="metric"><span class="label">Input</span><b>On-time submission</b><span>Deliverables before the deadline, by week.</span></div>
+        <div class="metric"><span class="label">Input</span><b>Time to first action</b><span>Seconds from landing on home to tapping the hero CTA.</span></div>
+        <div class="metric"><span class="label">Outcome</span><b>Programme completion and certification</b><span>Reached a signed skill profile.</span></div>
+        <div class="metric"><span class="label">Outcome</span><b>Rubric growth, W1 → W3</b><span>Mean mentor score change per criterion.</span></div>
+        <div class="metric"><span class="label">Outcome</span><b>Self–mentor gap shrinking</b><span>Students calibrating their own judgement over time.</span></div>
+        <div class="metric"><span class="label">Guardrail</span><b>Nudge opt-outs</b><span>If these rise, the nudges have become nagging.</span></div>
+      </div>
+    </section>
+
+    <section>
+      <h2>7. Decisions needed from the programme team</h2>
+      <p>These are open in the user journey doc, and each one changes what the dashboard shows:</p>
+      <ul>
+        <li><b>Nudge channel.</b> WhatsApp, email or push? I'd go WhatsApp-first with a reply-to-answer link, plus the inline field on home.</li>
+        <li><b>Late submissions.</b> Blocked, flagged or timestamped? This decides whether the deadline hero shows "late" or "closed".</li>
+        <li><b>At-risk rule.</b> The prototype assumes 3 days without activity or a missed live session. Students and facilitators should get the same rule.</li>
+        <li><b>Gap visibility.</b> Should students see their self-assessment next to the mentor's score? I recommend yes, but only after the mentor's score is locked.</li>
+        <li><b>Certification trigger.</b> Is the mentor's Week 4 sign-off the certificate, or is there a separate admin step?</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>8. References I kept, and the ones I dropped</h2>
+      <p>The first Mobbin pass assumed a job board. Once the programme docs showed a mentored cohort programme, I kept the learning and "up next" patterns and dropped most of the listings and application-tracker patterns.</p>
+      <div class="refs">
+        <div class="ref"><a href="https://mobbin.com/screens/18683325-d982-4756-b06e-4ed52c933b06" target="_blank" rel="noopener">Coursera · Home</a><span>Continue card + weekly goal → hero + daily prompt streak</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/614b2017-42b7-413d-9f06-e8588d472894" target="_blank" rel="noopener">Preply · Before your lesson</a><span>Prep checklist attached to an event → deadline and Week 4 heroes</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/900344ad-22ba-48b3-ac81-5513a2b24a15" target="_blank" rel="noopener">Preply · Up next</a><span>Time-ordered agenda → rail "Coming up"</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/1ac1f719-f20f-4666-9a42-d32cf7013008" target="_blank" rel="noopener">Mercor · Applications</a><span>"3 of 5 steps" progress → weekly loop stepper</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/33f72505-df46-40ac-a916-3b649be52606" target="_blank" rel="noopener">Contra · Profile completion</a><span>Explains why it matters → skill profile preview</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/597bbefb-e6cf-401c-abc6-47789b29e5b7" target="_blank" rel="noopener">Codecademy · Skills tracking</a><span>Per-skill progress → rubric trend rows</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/3f33c551-e655-4314-b158-06df1a460046" target="_blank" rel="noopener">Uxcel · Home</a><span>Right rail for secondary motivation → cohort pulse + badges</span></div>
+        <div class="ref"><a href="https://mobbin.com/screens/91e22169-45b5-4d19-9cca-c63362229ace" target="_blank" rel="noopener">ClassDojo · To do</a><span>One-button rows → library list</span></div>
+        <div class="ref drop"><a href="https://mobbin.com/screens/e9bf41e5-5435-4681-a81a-a0887726f0b9" target="_blank" rel="noopener">Mercor · Explore</a><span>Dropped: no marketplace of listings in this programme</span></div>
+        <div class="ref drop"><a href="https://mobbin.com/screens/80dfe542-7c1b-4303-a449-b4f465d615fe" target="_blank" rel="noopener">Homerun · ATS board</a><span>Dropped: recruiter-side pipeline</span></div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+
+  // ---------- Program data (example content) ----------
+  var CRITERIA = ["Problem framing", "Evidence", "Communication", "Execution"];
+  var LEVELS = ["Emerging", "Developing", "Proficient", "Advanced"]; // 1–4
+  var MENTOR = [[2.5, 2.0, 3.0, 2.5], [3.0, 3.0, 3.5, 2.5], [3.5, 3.0, 4.0, 3.5]];
+  var SELF = [[3.5, 3.0, 3.0, 3.0], [3.5, 2.5, 3.5, 3.5], [3.5, 3.5, 4.0, 3.5]];
+  var WEEKS = [
+    { n: 1, title: "Understand the user", dates: "5–11 Oct" },
+    { n: 2, title: "Define the opportunity", dates: "12–18 Oct" },
+    { n: 3, title: "Prototype and test", dates: "19–25 Oct" },
+    { n: 4, title: "Final presentation", dates: "26 Oct–1 Nov" }
+  ];
+  var LEARN = {
+    2: [
+      { t: "Sizing a market on the back of an envelope", k: "video", m: "Case study", d: 12, must: true },
+      { t: "Writing a one-page opportunity brief", k: "read", m: "Reading", d: 8, must: true },
+      { t: "When the problem is real but too small", k: "video", m: "Case study", d: 9 },
+      { t: "TAM, SAM, SOM without the jargon", k: "read", m: "Reading", d: 6 },
+      { t: "An annotated brief from Cohort 2", k: "read", m: "Worked example", d: 10 },
+      { t: "Opportunity brief template", k: "read", m: "Template", d: 2, must: true }
+    ],
+    3: [
+      { t: "Paper prototypes in an afternoon", k: "video", m: "Case study", d: 11, must: true },
+      { t: "Running a 20-minute usability test", k: "read", m: "Reading", d: 9, must: true },
+      { t: "What to do when users ignore your feature", k: "video", m: "Case study", d: 8 },
+      { t: "Test script template", k: "read", m: "Template", d: 2, must: true },
+      { t: "Synthesising five sessions into one page", k: "read", m: "Reading", d: 7 }
+    ],
+    4: [
+      { t: "Structuring a seven-minute pitch", k: "read", m: "Reading", d: 8, must: true },
+      { t: "Cohort 2 final: the study planner pitch", k: "video", m: "Case study", d: 14, must: true },
+      { t: "Answering the panel's hardest question", k: "video", m: "Case study", d: 6 },
+      { t: "Final deck template", k: "read", m: "Template", d: 2 }
+    ]
+  };
+
+  // ---------- Scenarios ----------
+  var SCEN = [
+    {
+      id: "start", chip: "Wk 2 · Mon", caption: "<b>Start of week.</b> Monday 12 Oct, Week 2 unlocked. Week 1 feedback is in; nothing done yet this week.",
+      week: 2, day: 1, today: "Mon 12 Oct", streak: 6, learnDone: [], scored: 1,
+      steps: [["active", "0 of 6 done"], ["upcoming", "Wed 14 Oct, 7 pm"], ["upcoming", "Due Sun 18 Oct"], ["locked", "Opens after you submit"], ["upcoming", "Call Tue 20 Oct"]],
+      chips: [["brand", "Deliverable: Opportunity brief"], ["", "Due Sun 18 Oct, 11:59 pm"]],
+      prompt: "In one line: who exactly has the problem you're working on?",
+      answered: 11,
+      agenda: [
+        { hot: false, mo: "Oct", d: "14", t: "Facilitator session · Sizing without spreadsheets", m: "Wed, 7:00–8:00 pm · Meera Iyer", join: "Join opens 6:50 pm" },
+        { hot: true, mo: "Oct", d: "18", t: "Opportunity brief due", m: "Sun, 11:59 pm" },
+        { hot: false, mo: "Oct", d: "20", t: "Mentor call with Rohan", m: "Tue, 6:30–7:00 pm · 30 min" }
+      ],
+      pulse: [["11", "of 24 answered today"], ["0", "briefs submitted"]]
+    },
+    {
+      id: "deadline", chip: "Wk 2 · Sat", caption: "<b>Deadline.</b> Saturday 17 Oct, brief due tomorrow. Try it: submit, then rate your own work.",
+      week: 2, day: 6, today: "Sat 17 Oct", streak: 11, learnDone: [0, 1, 2, 3, 5], scored: 1,
+      steps: [["done", "5 of 6 done"], ["done", "Attended · recording"], ["active", "Due tomorrow"], ["locked", "Opens after you submit"], ["upcoming", "Call Tue 20 Oct"]],
+      chips: [["accent", "Brief due tomorrow, 11:59 pm"]],
+      prompt: "What's the strongest piece of evidence in your brief, and what's the weakest?",
+      answered: 15,
+      agenda: [
+        { hot: true, mo: "Oct", d: "18", t: "Opportunity brief due", m: "Sun, 11:59 pm · tomorrow" },
+        { hot: false, mo: "Oct", d: "20", t: "Mentor call with Rohan", m: "Tue, 6:30–7:00 pm · 30 min" },
+        { hot: false, mo: "Oct", d: "14", t: "Recording · Sizing without spreadsheets", m: "Wed session · 52 min", rec: true }
+      ],
+      pulse: [["15", "of 24 answered today"], ["9", "briefs submitted"]]
+    },
+    {
+      id: "feedback", chip: "Wk 3 · Tue", caption: "<b>Feedback in.</b> Tuesday 20 Oct, after the mentor call. Week 2 is scored; Week 3 has started.",
+      week: 3, day: 2, today: "Tue 20 Oct", streak: 14, learnDone: [0], scored: 2,
+      steps: [["active", "1 of 5 done"], ["upcoming", "Wed 21 Oct, 7 pm"], ["upcoming", "Due Sun 25 Oct"], ["locked", "Opens after you submit"], ["upcoming", "Call Tue 27 Oct"]],
+      chips: [["good", "Week 2 scored"], ["brand", "Deliverable: Tested prototype"]],
+      prompt: "Rohan said your 'why now' is a guess. What would make it a fact?",
+      answered: 9,
+      agenda: [
+        { hot: false, mo: "Oct", d: "21", t: "Facilitator session · Prototype in a day", m: "Wed, 7:00–8:00 pm · Meera Iyer", join: "Join opens 6:50 pm" },
+        { hot: true, mo: "Oct", d: "25", t: "Tested prototype due", m: "Sun, 11:59 pm" },
+        { hot: false, mo: "Oct", d: "27", t: "Mentor call with Rohan", m: "Tue, 6:30–7:00 pm · 30 min" }
+      ],
+      pulse: [["9", "of 24 answered today"], ["22", "of 24 got Week 2 feedback"]]
+    },
+    {
+      id: "final", chip: "Wk 4 · Wed", caption: "<b>Final stretch.</b> Wednesday 28 Oct. Presentation on Saturday; skill profile drafted after it.",
+      week: 4, day: 3, today: "Wed 28 Oct", streak: 22, learnDone: [0], scored: 3,
+      steps: [["active", "1 of 4 done"], ["upcoming", "Rehearsal Thu 29 Oct"], ["upcoming", "Present Sat 31 Oct"], ["locked", "After presenting"], ["upcoming", "Skill profile sign-off"]],
+      chips: [["accent", "Final presentation Sat 31 Oct, 11:00 am"]],
+      prompt: "If you had 30 seconds with the panel, what's the one sentence you'd say?",
+      answered: 18,
+      agenda: [
+        { hot: false, mo: "Oct", d: "29", t: "Rehearsal slots with Meera", m: "Thu, 5:00–8:00 pm · 15 min each", join: "Book a slot" },
+        { hot: true, mo: "Oct", d: "31", t: "Final presentation", m: "Sat, 11:00 am · cohort, then mentor panel" },
+        { hot: false, mo: "Nov", d: "1", t: "Skill profile review with Rohan", m: "Sun · sign-off for certification" }
+      ],
+      pulse: [["18", "of 24 answered today"], ["14", "decks uploaded"]]
+    },
+    {
+      id: "drift", chip: "Drifting", caption: "<b>Drifting.</b> Thursday 15 Oct. No activity since Sunday; missed Wednesday's session. Same signal the facilitator sees as an at-risk flag.",
+      week: 2, day: 4, today: "Thu 15 Oct", streak: 0, pausedFrom: 6, learnDone: [], scored: 1,
+      steps: [["active", "0 of 6 done"], ["missed", "Missed · recording ready"], ["upcoming", "Due Sun 18 Oct"], ["locked", "Opens after you submit"], ["upcoming", "Call Tue 20 Oct"]],
+      chips: [["warn", "3 prompts missed"], ["", "Brief due Sun 18 Oct"]],
+      prompt: "No pressure: what's one thing from Week 1 you'd tell a friend?",
+      answered: 13,
+      agenda: [
+        { hot: false, mo: "Oct", d: "14", t: "Recording · Sizing without spreadsheets", m: "You missed this · 52 min, or the 9-min recap", rec: true },
+        { hot: true, mo: "Oct", d: "18", t: "Opportunity brief due", m: "Sun, 11:59 pm" },
+        { hot: false, mo: "Oct", d: "20", t: "Mentor call with Rohan", m: "Tue, 6:30–7:00 pm · can be moved" }
+      ],
+      pulse: [["13", "of 24 answered today"], ["4", "briefs submitted"]]
+    }
+  ];
+
+  var STEP_NAMES = ["Learn", "Live session", "Submit", "Self-assess", "Mentor feedback"];
+  var STEP_NAMES_W4 = ["Prepare", "Rehearse", "Present", "Reflect", "Skill profile"];
+
+  // ---------- State ----------
+  var state = {
+    scen: "start",
+    notes: false,
+    // per-scenario mutable bits
+    learn: {},
+    prompt: {},
+    deadlineStage: "submit",
+    selfPick: [null, null, null, null]
+  };
+  SCEN.forEach(function (s) { state.learn[s.id] = s.learnDone.slice(); });
+
+  try {
+    var saved = JSON.parse(localStorage.getItem("taqsha-proto") || "{}");
+    if (saved.notes) state.notes = true;
+    if (saved.scen && SCEN.some(function (s) { return s.id === saved.scen; })) state.scen = saved.scen;
+  } catch (e) {}
+  function persist() {
+    try { localStorage.setItem("taqsha-proto", JSON.stringify({ notes: state.notes, scen: state.scen })); } catch (e) {}
+  }
+
+  function cur() { return SCEN.filter(function (s) { return s.id === state.scen; })[0]; }
+  function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function pri(p) { return '<span class="pri">' + p + "</span>"; }
+  function note(html) { return '<div class="note">' + html + "</div>"; }
+  function fmt(n) { return n.toFixed(1); }
+
+  var ICON_VIDEO = '<svg viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M6 4.5v11l9-5.5z"/></svg>';
+  var ICON_READ = '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M5 3.5h7l3 3v10H5z"/><path d="M8 9.5h4M8 12.5h4"/></svg>';
+
+  // ---------- Renderers ----------
+  function renderWeekHead(s) {
+    var w = WEEKS[s.week - 1];
+    var journey = WEEKS.map(function (wk) {
+      var bars = "";
+      for (var d = 1; d <= 7; d++) {
+        var cls = "";
+        if (wk.n < s.week || (wk.n === s.week && d < s.day)) cls = "on";
+        if (wk.n === s.week && d === s.day) cls = "today";
+        bars += '<i class="' + cls + '"></i>';
+      }
+      return '<div class="jw' + (wk.n === s.week ? " current" : "") + '"><div class="jw-bar" aria-hidden="true">' + bars + '</div><div class="jw-lab"><b>W' + wk.n + '<i class="wt" style="font-style:normal"> · ' + esc(wk.title) + "</i></b><span>" + wk.dates + "</span></div></div>";
+    }).join("");
+
+    var names = s.week === 4 ? STEP_NAMES_W4 : STEP_NAMES;
+    var steps = currentSteps(s);
+    var loop = steps.map(function (st, i) {
+      return '<div class="step ' + st[0] + '"><div class="step-top"><span class="dot" aria-hidden="true"></span><span class="step-name">' + names[i] + '</span></div><div class="step-meta">' + esc(st[1]) + "</div></div>";
+    }).join("");
+
+    var chips = s.chips.map(function (c) { return '<span class="chip ' + c[0] + '">' + esc(c[1]) + "</span>"; }).join("");
+
+    return '<section class="weekhead" aria-label="This week">' +
+      '<div class="weekhead-top"><div><div class="label">' + esc(s.today) + " · Product track · Cohort 3</div>" +
+      '<h1><span class="wk">Week ' + s.week + ' of 4</span> · ' + esc(w.title) + "</h1>" +
+      '<p class="sub">Project: a study planner for Class 12 board-exam students</p></div>' +
+      '<div class="chips">' + chips + "</div></div>" +
+      '<div class="journey" role="img" aria-label="Programme progress: week ' + s.week + ' of 4, day ' + s.day + '">' + journey + "</div>" +
+      '<div class="loop" role="list" aria-label="This week\'s loop">' + loop + "</div>" +
+      note("Everything is framed by the week. The feature list is organised by module, but students live the programme as weeks. The five steps mirror Steps 1–7 of the user journey doc, so a student can see where they are in the loop without opening anything. Covers <b>Progress bar per week (P1)</b>.") +
+      "</section>";
+  }
+
+  function currentSteps(s) {
+    var steps = s.steps.map(function (x) { return x.slice(); });
+    var total = (LEARN[s.week] || []).length;
+    var done = state.learn[s.id].length;
+    // On deadline day the learn step is treated as finished so only one step reads as active.
+    var learnStatus = s.id === "deadline" || done === total ? "done" : "active";
+    steps[0] = [learnStatus, done + " of " + total + " done"];
+    if (s.id === "deadline") {
+      if (state.deadlineStage === "self") {
+        steps[2] = ["done", "Submitted Sat 4:12 pm"];
+        steps[3] = ["active", "2 minutes"];
+      } else if (state.deadlineStage === "done") {
+        steps[2] = ["done", "Submitted Sat 4:12 pm"];
+        steps[3] = ["done", "Locked"];
+        steps[4] = ["upcoming", "Call Tue 20 Oct"];
+      }
+    }
+    return steps;
+  }
+
+  function heroWrap(tone, eyebrow, body, noteHtml, priTag) {
+    return '<section class="hero ' + (tone ? "tone-" + tone : "") + '" aria-label="Up next">' +
+      '<div class="hero-eyebrow">' + eyebrow + (priTag ? pri(priTag) : "") + "</div>" + body + (noteHtml ? note(noteHtml) : "") + "</section>";
+  }
+
+  function renderHero(s) {
+    if (s.id === "start") {
+      return heroWrap("", "Up next · start of Week 2",
+        '<div class="hero-grid"><div style="display:grid;gap:12px">' +
+        "<h2>Start with the 12-minute market sizing case study</h2>" +
+        '<p class="lead">Rohan scored Evidence lowest in Week 1 (2.0 of 4). This week\'s opportunity brief is graded mostly on evidence, so begin with the case study that shows how to size a market with three numbers.</p>' +
+        '<div class="actions"><button class="btn primary" data-act="learn0">' + ICON_VIDEO.replace('aria-hidden="true"', 'aria-hidden="true" width="14" height="14"') + "Play case study · 12 min</button><button class=\"btn\">Read the Week 2 brief</button></div></div>" +
+        '<div class="panel"><h3>This week you\'ll hand in</h3><p style="font-size:14px"><b>Opportunity brief</b>, one page. Who has the problem, evidence it\'s real, how big it is, why now.</p>' +
+        '<p style="font-size:13px;color:var(--muted)">Due Sun 18 Oct, 11:59 pm · scored on 4 criteria</p></div></div>',
+        "One next action, chosen by state. Here it's personalised from last week's weakest rubric criterion, which links feedback to this week's work. Patterns: Coursera's \"Continue learning\" card and Preply's \"Up next\". The deliverable panel answers the first question every student has on Monday.",
+        "P0");
+    }
+    if (s.id === "deadline") {
+      if (state.deadlineStage === "submit") {
+        return heroWrap("", "Due tomorrow, 11:59 pm",
+          '<div class="hero-grid"><div style="display:grid;gap:12px">' +
+          "<h2>Submit your opportunity brief</h2>" +
+          '<p class="lead">Your draft covers three of the four sections Rohan will score. Add a paragraph on why now, then submit.</p>' +
+          '<div class="file"><div class="file-ic">PDF</div><div><b>ananya-opportunity-brief-v3.pdf</b><span>2.1 MB · edited 40 min ago</span></div></div>' +
+          '<div class="actions"><button class="btn primary" data-act="submit">Submit brief</button><button class="btn">Replace file</button></div></div>' +
+          '<div class="panel"><h3>Brief checklist</h3><ul class="checklist">' +
+          '<li class="done"><span class="tick on"></span><span>Who has the problem</span></li>' +
+          '<li class="done"><span class="tick on"></span><span>Evidence it\'s real: 3 interviews + 1 data point</span></li>' +
+          '<li class="done"><span class="tick on"></span><span>Rough size of the opportunity</span></li>' +
+          '<li><span class="tick"></span><span>Why now, in one paragraph</span></li></ul></div></div>',
+          "Deadline state. The upload (P0) comes with the brief's own checklist, the same idea as Preply's \"Before your lesson\". Submitting leads straight into self-assessment, so the student doesn't need to go looking for it. Try the button.",
+          "P0");
+      }
+      if (state.deadlineStage === "self") {
+        var rows = CRITERIA.map(function (c, i) {
+          var seg = LEVELS.map(function (l, j) {
+            return '<button data-act="pick" data-c="' + i + '" data-l="' + (j + 1) + '" aria-pressed="' + (state.selfPick[i] === j + 1) + '">' + l + "</button>";
+          }).join("");
+          return '<div class="rp-row"><span>' + c + '</span><div class="seg" role="group" aria-label="' + c + '">' + seg + "</div></div>";
+        }).join("");
+        var ready = state.selfPick.every(function (x) { return x !== null; });
+        return heroWrap("brand", "Submitted Sat 17 Oct, 4:12 pm",
+          '<div style="display:grid;gap:14px"><h2>Rate your own brief before Rohan does</h2>' +
+          '<p class="lead">It takes two minutes. Once locked, you can\'t change it. That\'s what makes comparing it with Rohan\'s score useful.</p>' +
+          '<div class="rubric-pick">' + rows + "</div>" +
+          '<div class="actions"><button class="btn primary" data-act="lock"' + (ready ? "" : " disabled") + '>Lock my self-assessment</button><span style="font-size:13px;color:var(--muted);align-self:center">' + (ready ? "Ready to lock" : state.selfPick.filter(function (x) { return x; }).length + " of 4 rated") + "</span></div></div>",
+          "Self-assessment against the rubric (P1), locked once submitted as the journey doc's Step 5 rule requires. Asking at the moment of submission gets far higher completion than a separate task later.",
+          "P1");
+      }
+      return heroWrap("good", "All set for Week 2",
+        '<div style="display:grid;gap:12px"><h2>Brief submitted and self-assessment locked</h2>' +
+        '<p class="lead">Rohan scores your brief before your call on Tue 20 Oct at 6:30 pm. You\'ll see his scores next to yours here afterwards. Week 3 opens on Monday.</p>' +
+        '<div class="actions"><button class="btn" data-act="reset-deadline">Replay this flow</button><button class="btn" data-goto="feedback">See what feedback looks like</button></div></div>',
+        "A clear done state matters: students should leave knowing nothing else is owed this week.", null);
+    }
+    if (s.id === "feedback") {
+      var w = 1; // week 2 index
+      var rows2 = CRITERIA.map(function (c, i) {
+        var me = SELF[w][i], mn = MENTOR[w][i], g = me - mn;
+        var cls = g > 0 ? "over" : g < 0 ? "under" : "match";
+        var txt = g === 0 ? "match" : (g > 0 ? "+" : "−") + fmt(Math.abs(g));
+        return "<tr><td>" + c + '</td><td class="n">' + fmt(me) + '</td><td class="n"><b>' + fmt(mn) + '</b></td><td class="n"><span class="gap-pill ' + cls + '">' + txt + "</span></td></tr>";
+      }).join("");
+      return heroWrap("good", "Feedback is in · Week 2",
+        '<div class="hero-grid"><div style="display:grid;gap:14px">' +
+        "<h2>Rohan scored your opportunity brief: 3.0 average, up from 2.5</h2>" +
+        '<blockquote class="quote" style="margin:0">The sizing is honest and well sourced. The \'why now\' is still a guess. Find one fact that makes this urgent this year, not any year.<cite>Rohan Mehta, mentor · Tue 20 Oct</cite></blockquote>' +
+        '<div class="carry"><span class="label">Carry into Week 3</span><span>Test your \'why now\' in at least two of your prototype sessions.</span></div>' +
+        '<div class="actions"><button class="btn primary">Start Week 3</button><button class="btn">Read full feedback</button></div></div>' +
+        '<div class="panel"><h3>You vs Rohan</h3><table class="compare"><thead><tr><th>Criterion</th><th class="n">You</th><th class="n">Rohan</th><th class="n">Gap</th></tr></thead><tbody>' + rows2 + "</tbody></table>" +
+        '<p style="font-size:12.5px;color:var(--muted)">Scale 1–4: Emerging, Developing, Proficient, Advanced. You were closer this week than in Week 1.</p></div></div>',
+        "When feedback lands it takes over the hero for a day, because this is the moment that makes the programme worth paying for. The gap view (P1, previously mentor-only) is shown to the student too, only after the mentor score is locked. The \"carry into\" line connects feedback to the next week's work.",
+        "P1");
+    }
+    if (s.id === "final") {
+      return heroWrap("", "Final presentation · Sat 31 Oct, 11:00 am",
+        '<div class="hero-grid"><div style="display:grid;gap:14px">' +
+        '<div class="countdown"><span class="big mono">3</span><span class="unit">days to your<br>final presentation</span></div>' +
+        '<p class="lead">Seven minutes to the cohort, then questions from the mentor panel. A 15-minute rehearsal with Meera is the best predictor of a calm Saturday.</p>' +
+        '<div class="actions"><button class="btn primary">Book a rehearsal slot</button><button class="btn">Open deck template</button></div></div>' +
+        '<div class="panel"><h3>Before Saturday</h3><ul class="checklist">' +
+        '<li class="done"><span class="tick on"></span><span>Upload a draft deck</span></li>' +
+        '<li><span class="tick"></span><span>Book a rehearsal with Meera</span></li>' +
+        '<li><span class="tick"></span><span>Record a seven-minute dry run</span></li>' +
+        '<li><span class="tick"></span><span>Add two user quotes from your Week 3 tests</span></li></ul></div></div>',
+        "Week 4 reuses the same layout, with the loop renamed for presentation week. The countdown (P2) is earned here: it only shows in the final week, where it adds focus rather than anxiety.",
+        "P2");
+    }
+    // drift
+    return heroWrap("", "Welcome back, Ananya",
+      '<div class="hero-grid"><div style="display:grid;gap:14px">' +
+      "<h2>Catch up on Week 2 in 25 minutes</h2>" +
+      '<p class="lead">You\'ve been away since Sunday, and that\'s fine. Here\'s the shortest way back. Your brief is still due Sun 18 Oct.</p>' +
+      '<ol class="plan">' +
+      '<li><span>Watch the 9-minute recap of Wednesday\'s session</span><span class="mins">9 min</span></li>' +
+      '<li><span>Answer today\'s prompt below</span><span class="mins">2 min</span></li>' +
+      '<li><span>Read "Writing a one-page opportunity brief"</span><span class="mins">8 min</span></li>' +
+      '<li><span>Start your brief from the template</span><span class="mins">6 min</span></li></ol>' +
+      '<div class="actions"><button class="btn primary">Start with the recap</button></div></div>' +
+      '<div class="panel"><h3>Need more time?</h3><p style="font-size:14px">Meera, your facilitator, can move your mentor call or talk through the brief.</p>' +
+      '<div class="person"><div class="avatar" aria-hidden="true">MI</div><div><b>Meera Iyer</b><span>Facilitator · replies within a few hours</span></div></div>' +
+      '<div class="actions"><button class="btn sm">Message Meera</button></div></div></div>',
+      "The rule that raises a facilitator's at-risk flag (P0 facilitator dashboard) also changes the student's home: a short, ordered plan replaces the normal hero. The tone is welcoming rather than punitive, and the streak is paused, not reset. Rule to confirm with the programme team: 3 days without activity or a missed live session.",
+      "P0");
+  }
+
+  function renderPrompt(s) {
+    var p = state.prompt[s.id];
+    var streak = p ? (s.id === "drift" ? 1 : s.streak + 1) : s.streak;
+    var days = "";
+    var shown = Math.min(7, Math.max(streak, 0));
+    for (var i = 0; i < 7; i++) days += '<i class="' + (i >= 7 - shown ? "on" : "") + '"></i>';
+    var streakTxt;
+    if (s.id === "drift" && !p) streakTxt = "Streak paused at " + s.pausedFrom + " days · answer today to restart";
+    else if (s.id === "drift" && p) streakTxt = "Streak restarted · day 1";
+    else streakTxt = streak + "-day streak";
+
+    var body;
+    if (!p) {
+      body = '<p class="prompt-q" id="pq">' + esc(s.prompt) + "</p>" +
+        '<textarea id="prompt-input" aria-labelledby="pq" placeholder="A sentence or two is enough"></textarea>' +
+        '<div class="prompt-foot"><div class="streak"><span class="streak-days" aria-hidden="true">' + days + "</span>" + esc(streakTxt) + "</div>" +
+        '<button class="btn primary sm" data-act="answer">Send answer</button></div>';
+    } else {
+      body = '<p class="prompt-q">' + esc(s.prompt) + "</p>" +
+        '<div class="prompt-done"><div class="prompt-mine">' + esc(p) + "</div>" +
+        '<div class="streak"><span class="streak-days" aria-hidden="true">' + days + "</span>" + esc(streakTxt) + " · " + (s.answered + 1) + " of 24 in your cohort answered</div>" +
+        '<div class="peers"><div class="label">From your cohort</div>' +
+        '<div class="peer"><div class="avatar" aria-hidden="true">KS</div><div><b>Kabir S.</b> Parents of Class 9 kids who ask for help with maths after 9 pm. I\'ve heard it in 4 of 5 interviews.</div></div>' +
+        '<div class="peer"><div class="avatar" aria-hidden="true">IP</div><div><b>Ishita P.</b> First-year hostel students who skip breakfast because the mess closes at 8:30.</div></div></div></div>';
+    }
+    return '<section class="card prompt" aria-label="Today\'s prompt"><div class="card-h"><h2>Today\'s prompt' + pri("P0") + '</h2><span class="aside">Also sent on WhatsApp at 8:00 am</span></div>' + body +
+      note("Daily nudge with response prompt (P0). Students answer inline here or by replying to the nudge, with no separate page. After answering, they see a couple of peer answers: cheap social proof that borrows from the P2 build feed without building it yet. Channel still to be confirmed with the programme team.") +
+      "</section>";
+  }
+
+  function renderLearn(s) {
+    var items = LEARN[s.week] || [];
+    var done = state.learn[s.id];
+    var mins = items.reduce(function (a, it, i) { return a + (done.indexOf(i) === -1 ? it.d : 0); }, 0);
+    var pct = items.length ? Math.round(done.length / items.length * 100) : 0;
+    var list = items.map(function (it, i) {
+      var isDone = done.indexOf(i) !== -1;
+      return '<li class="' + (isDone ? "done" : "") + '"><button class="tickbtn" data-act="toggle" data-i="' + i + '" aria-pressed="' + isDone + '" aria-label="Mark ' + esc(it.t) + (isDone ? ' as not done' : ' as done') + '"><span class="tick ' + (isDone ? "on" : "") + '"></span></button>' +
+        '<span class="thumb ' + (it.k === "video" ? "video" : "") + '">' + (it.k === "video" ? ICON_VIDEO : ICON_READ) + "</span>" +
+        '<div style="min-width:0"><div class="t">' + esc(it.t) + '</div><div class="m">' + (it.must ? '<span class="tag must">Needed for brief</span>' : "") + '<span class="tag">' + esc(it.m) + "</span></div></div>" +
+        '<span class="dur">' + it.d + " min</span></li>";
+    }).join("");
+    var label = s.week === 4 ? "For your final presentation" : "For this week's milestone";
+    return '<section class="card" aria-label="Learn this week"><div class="card-h"><h2>' + label + pri("P0") + '</h2><span class="aside">' + done.length + " of " + items.length + " · " + mins + ' min left · <a href="#prototype">Full library</a></span></div>' +
+      '<div class="progressline" aria-hidden="true"><i style="width:' + pct + '%"></i></div>' +
+      '<ul class="learn">' + list + "</ul>" +
+      note("Content library + case study library (both P0), filtered to this week's milestone and ordered. Items the deliverable depends on are tagged, so a student short on time knows what to skip. Ticking items updates the loop above. Pattern: ClassDojo's to-do rows.") +
+      "</section>";
+  }
+
+  function spark(i, weeks) {
+    // x: 4 week slots, y: 1..4 scale
+    var W = 168, H = 40, padX = 12, padY = 5;
+    function x(k) { return padX + k * ((W - 2 * padX) / 3); }
+    function y(v) { return padY + (4 - v) * ((H - 2 * padY) / 3); }
+    var grid = "";
+    [1, 2, 3, 4].forEach(function (v) { grid += '<line x1="' + padX + '" x2="' + (W - padX) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="var(--line)" stroke-width="1"/>'; });
+    var pts = [], selfDots = "";
+    for (var k = 0; k < weeks; k++) {
+      pts.push(x(k) + "," + y(MENTOR[k][i]));
+      selfDots += '<circle cx="' + x(k) + '" cy="' + y(SELF[k][i]) + '" r="3.2" fill="var(--surface)" stroke="var(--muted)" stroke-width="1.5"/>';
+    }
+    var future = "";
+    for (var f = weeks; f < 4; f++) future += '<circle cx="' + x(f) + '" cy="' + y(1) + '" r="2" fill="var(--line)"/>';
+    var area = weeks > 1 ? '<polygon points="' + x(0) + "," + (H - padY) + " " + pts.join(" ") + " " + x(weeks - 1) + "," + (H - padY) + '" fill="var(--brand)" fill-opacity="0.10"/>' : "";
+    var line = weeks > 1 ? '<polyline points="' + pts.join(" ") + '" fill="none" stroke="var(--brand)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>' : "";
+    var last = pts[pts.length - 1].split(",");
+    var end = '<circle cx="' + last[0] + '" cy="' + last[1] + '" r="4.5" fill="var(--brand)"/>';
+    return '<svg class="spark" viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="' + CRITERIA[i] + ' mentor scores by week">' + grid + area + line + selfDots + future + end + "</svg>";
+  }
+
+  function renderGrowth(s) {
+    var weeks = s.scored;
+    var rows = CRITERIA.map(function (c, i) {
+      var latest = MENTOR[weeks - 1][i], first = MENTOR[0][i], d = latest - first;
+      var dtxt = weeks === 1 ? "—" : (d > 0 ? "+" + fmt(d) : d === 0 ? "±0.0" : fmt(d));
+      return '<div class="g-row"><span class="name">' + c + "</span>" + spark(i, weeks) + '<span class="val">' + fmt(latest) + '</span><span class="delta ' + (d > 0 ? "up" : "flat") + '">' + dtxt + "</span></div>";
+    }).join("");
+    var axis = '<div class="g-row head" style="padding-top:0"><span></span><div class="spark-axis"><span>W1</span><span>W2</span><span>W3</span><span>W4</span></div><span></span><span></span></div>';
+    var sub = weeks === 1 ? "1 week scored" : weeks + " weeks scored";
+    var skill = "";
+    if (s.week === 4) {
+      skill = '<div style="display:grid;gap:10px;padding-top:6px;border-top:1px solid var(--line)"><div class="card-h"><h2>Your skill profile' + pri("P1") + '</h2><span class="aside">Draft after Saturday · Rohan signs it off</span></div>' +
+        '<div class="skillp">' +
+        '<div class="skill"><span class="lvl">4.0 · Advanced</span><b>Communicating a product idea</b><span>Strongest across all three weeks</span></div>' +
+        '<div class="skill"><span class="lvl">3.5 · Proficient</span><b>Framing a user problem</b><span>Up 1.0 since Week 1</span></div>' +
+        '<div class="skill"><span class="lvl">3.5 · Proficient</span><b>Prototyping and testing</b><span>Five usability sessions run</span></div>' +
+        '<div class="skill"><span class="lvl">3.0 · Proficient</span><b>Using evidence</b><span>Biggest growth area: up 1.0</span></div></div></div>';
+    }
+    return '<section class="card" aria-label="Your growth"><div class="card-h"><h2>Your growth' + pri("P1") + '</h2><span class="aside">Mentor scores · ' + sub + "</span></div>" +
+      '<div class="legend"><span><i></i>Rohan\'s score</span><span><i class="self"></i>Your self-assessment</span><span class="scale-note">Scale 1–4 · Emerging → Advanced</span></div>' +
+      '<div class="growth"><div class="g-row head"><span>Criterion</span><span>Trend</span><span style="text-align:right">Now</span><span style="text-align:right">Since W1</span></div>' + rows + axis + "</div>" + skill +
+      note("Rubric trend across four weeks (P1), one row per criterion like Codecademy's skills tracking. Self-assessment dots sit next to the mentor's line, so calibration is visible over time. In Week 4 the skill profile preview (P1) appears here, so students see what the four weeks add up to before it is signed.") +
+      "</section>";
+  }
+
+  function renderRail(s) {
+    var agenda = s.agenda.map(function (a) {
+      var act = "";
+      if (a.join) act = '<div class="actions"><button class="btn sm" ' + (a.join.indexOf("opens") > -1 ? "disabled" : "") + ">" + esc(a.join) + "</button></div>";
+      if (a.rec) act = '<div class="actions"><button class="btn sm">Watch recording</button></div>';
+      return '<li class="' + (a.hot ? "hot" : "") + '"><div class="date"><small>' + a.mo + "</small><b>" + a.d + '</b></div><div><div class="t">' + esc(a.t) + '</div><div class="m">' + esc(a.m) + "</div>" + act + "</div></li>";
+    }).join("");
+
+    var badges = [
+      ["Week 1 shipped", true], ["7-day streak", s.streak >= 7 || s.id === "deadline"], ["Evidence hunter", s.scored >= 2], ["Final presenter", false]
+    ].map(function (b) { return '<span class="badge ' + (b[1] ? "" : "off") + '"><i aria-hidden="true"></i>' + b[0] + "</span>"; }).join("");
+
+    return '<section class="card" aria-label="Coming up"><div class="card-h"><h2>Coming up' + pri("P0") + "</h2></div><ul class=\"agenda\">" + agenda + "</ul>" +
+      note("Live session hub (P0): one-click join that opens 10 minutes before the start. The recording replaces the join button in the same slot afterwards, so missed sessions are easy to recover. Pattern: Preply's \"Up next\" list.") + "</section>" +
+
+      '<section class="card" aria-label="Your people"><div class="card-h"><h2>Your people</h2></div><div class="people">' +
+      '<div class="person"><div class="avatar" aria-hidden="true">RM</div><div><b>Rohan Mehta · mentor</b><span>Product lead, consumer apps · next call ' + (s.week === 4 ? "Sun 1 Nov" : s.week === 3 ? "Tue 27 Oct" : "Tue 20 Oct") + "</span></div></div>" +
+      '<div class="person"><div class="avatar" aria-hidden="true">MI</div><div><b>Meera Iyer · facilitator</b><span>Runs Wednesday sessions · Cohort 3</span></div></div></div>' +
+      note("Students should always know who's on their side, especially in a solo, online programme. Both people are one tap from a message.") + "</section>" +
+
+      '<section class="card coach" aria-label="AI coach"><div class="card-h"><h2>Stuck on your brief?' + pri("P2") + '</h2></div><p>The coach has read your Week 2 brief and Rohan\'s Week 1 feedback. Ask it to pressure-test your "why now".</p><div class="actions"><button class="btn sm">Ask the coach</button></div>' +
+      note("AI coach (P2), offered in context with the current week's brief and latest feedback rather than as a blank chatbot. Ships behind a flag.") + "</section>" +
+
+      '<section class="card" aria-label="Cohort pulse"><div class="card-h"><h2>Cohort 3 pulse' + pri("P2") + '</h2><span class="aside">24 students</span></div>' +
+      '<div class="pulse-stats"><div class="stat"><b class="mono">' + s.pulse[0][0] + "</b><span>" + s.pulse[0][1] + '</span></div><div class="stat"><b class="mono">' + s.pulse[1][0] + "</b><span>" + s.pulse[1][1] + "</span></div></div>" +
+      '<ul class="feed">' +
+      '<li><div class="avatar" aria-hidden="true">KS</div><div>Kabir shared a draft of his market sizing<time>2 h ago</time></div></li>' +
+      '<li><div class="avatar" aria-hidden="true">IP</div><div>Ishita earned <b>Evidence hunter</b><time>Yesterday</time></div></li></ul>' +
+      '<div class="label">Your badges</div><div class="badges">' + badges + "</div>" +
+      note("Live build feed, milestone badges and cohort chat (all P2) are kept to a pulse in the rail. They give a sense of company without competing with the week's work. Pattern: Uxcel's right rail. A/B test whether the feed moves completion before building chat.") + "</section>";
+  }
+
+  function render() {
+    var s = cur();
+    document.getElementById("app-body").innerHTML =
+      renderWeekHead(s) +
+      '<div class="cols"><div class="main">' + renderHero(s) + renderPrompt(s) + renderLearn(s) + renderGrowth(s) + '</div><aside class="rail">' + renderRail(s) + "</aside></div>";
+    document.getElementById("scen-caption").innerHTML = s.caption;
+    Array.prototype.forEach.call(document.querySelectorAll("#scen-list button"), function (b) {
+      b.setAttribute("aria-pressed", String(b.dataset.id === s.id));
+    });
+  }
+
+  // ---------- Chrome ----------
+  var list = document.getElementById("scen-list");
+  list.innerHTML = SCEN.map(function (s) { return '<button data-id="' + s.id + '" aria-pressed="false">' + s.chip + "</button>"; }).join("");
+  list.addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    state.scen = b.dataset.id; persist(); render();
+  });
+
+  var nt = document.getElementById("notes-toggle");
+  function applyNotes() {
+    document.body.classList.toggle("notes-on", state.notes);
+    nt.setAttribute("aria-pressed", String(state.notes));
+  }
+  nt.addEventListener("click", function () { state.notes = !state.notes; persist(); applyNotes(); });
+
+  function setView(v) {
+    var proto = v !== "approach";
+    document.getElementById("view-prototype").hidden = !proto;
+    document.getElementById("view-approach").hidden = proto;
+    document.getElementById("scen-wrap").style.visibility = proto ? "visible" : "hidden";
+    document.getElementById("scen-caption").hidden = !proto;
+    document.getElementById("tab-prototype").setAttribute("aria-selected", String(proto));
+    document.getElementById("tab-approach").setAttribute("aria-selected", String(!proto));
+  }
+  Array.prototype.forEach.call(document.querySelectorAll(".tabs button"), function (b) {
+    b.addEventListener("click", function () { setView(b.dataset.view); window.scrollTo(0, 0); });
+  });
+
+  // ---------- App interactions ----------
+  var toastEl = document.getElementById("toast"), toastT;
+  function toast(msg) {
+    toastEl.textContent = msg; toastEl.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { toastEl.classList.remove("show"); }, 2200);
+  }
+
+  document.getElementById("app-body").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    var s = cur(), act = b.dataset.act;
+    if (b.dataset.goto) { state.scen = b.dataset.goto; persist(); render(); window.scrollTo(0, 0); return; }
+    if (!act) { if (!b.disabled) toast("Prototype: this would open the real screen"); return; }
+    if (act === "toggle") {
+      var i = +b.dataset.i, arr = state.learn[s.id], at = arr.indexOf(i);
+      if (at === -1) arr.push(i); else arr.splice(at, 1);
+      render();
+    } else if (act === "learn0") {
+      if (state.learn[s.id].indexOf(0) === -1) state.learn[s.id].push(0);
+      render(); toast("Case study marked as watched");
+    } else if (act === "answer") {
+      var v = (document.getElementById("prompt-input").value || "").trim();
+      if (!v) { toast("Write a sentence first"); document.getElementById("prompt-input").focus(); return; }
+      state.prompt[s.id] = v; render(); toast("Answer sent");
+    } else if (act === "submit") {
+      state.deadlineStage = "self"; render(); toast("Brief submitted");
+    } else if (act === "pick") {
+      state.selfPick[+b.dataset.c] = +b.dataset.l; render();
+    } else if (act === "lock") {
+      state.deadlineStage = "done"; render(); toast("Self-assessment locked");
+    } else if (act === "reset-deadline") {
+      state.deadlineStage = "submit"; state.selfPick = [null, null, null, null]; render();
+    }
+  });
+
+  // ---------- Boot ----------
+  applyNotes();
+  render();
+  setView(location.hash === "#approach" ? "approach" : "prototype");
+})();
+</script>
